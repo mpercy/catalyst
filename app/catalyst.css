@@ -1,0 +1,59 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+body {
+  position:relative;
+  background: url(pyrenees-351266.jpg) no-repeat center center fixed;
+  background-size: cover;
+  color: #fff;
+  font: 16px/1 sans-serif;
+  text-shadow:
+    -1px -1px 0 rgba(0, 0, 0, .2),
+    1px -1px 0 rgba(0, 0, 0, .2),
+    1px 1px 0 rgba(0, 0, 0, .2),
+    -1px 1px 0 rgba(0, 0, 0, .2),
+    0 3px 5px rgba(0, 0, 0, .5);
+}
+#hello {
+  height:100%;
+  width:100%;
+  padding: 0;
+  margin: 0;
+  border-spacing: 0;
+  border: 0;
+}
+#hello td {
+  vertical-align:middle;
+  text-align:center;
+}
+.time {
+  font: 172px/1 sans-serif;
+}
+h1 {
+  font: 54px/1 sans-serif;
+  margin: 0;
+}
+
+h2 {
+  font: 16px/1 sans-serif;
+  margin: 0;
+}
+
+#todo {
+  position:absolute;
+  right:0;
+  bottom:0;
+}
+
+#todo a {
+  display:inline-block;
+  color:#fff;
+  text-decoration: none;
+  padding: 20px;
+}
+
+

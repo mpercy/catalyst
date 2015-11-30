@@ -1,0 +1,17 @@
+{
+   "manifest_version": 2,
+   "name": "Catalyst",
+   "version": "0.1",
+
+   "default_locale": "en",
+   "description": "Replace new tab page with a todo list.",
+   "background": {
+      "persistent": false
+   },
+   "chrome_url_overrides": {
+      "newtab": "catalyst.html"
+   },
+
+   "offline_enabled": true,
+   "permissions": [ "unlimitedStorage" ]
+}
