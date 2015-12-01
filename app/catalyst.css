@@ -7,16 +7,16 @@ html, body {
 }
 body {
   position:relative;
-  background: url(pyrenees-351266.jpg) no-repeat center center fixed;
+  background: url(unraw_travelling-CoD2Q92UaEg.jpg) no-repeat center center fixed;
   background-size: cover;
   color: #fff;
   font: 16px/1 sans-serif;
   text-shadow:
-    -1px -1px 0 rgba(0, 0, 0, .2),
-    1px -1px 0 rgba(0, 0, 0, .2),
-    1px 1px 0 rgba(0, 0, 0, .2),
-    -1px 1px 0 rgba(0, 0, 0, .2),
-    0 3px 5px rgba(0, 0, 0, .5);
+    -1px -1px 0 rgba(16, 16, 16, .2),
+    1px -1px 0 rgba(16, 16, 16, .2),
+    1px 1px 0 rgba(16, 16, 16, .2),
+    -1px 1px 0 rgba(16, 16, 16, .2),
+    0 3px 5px rgba(16, 16, 16, .5);
 }
 #hello {
   height:100%;
@@ -43,17 +43,82 @@ h2 {
   margin: 0;
 }
 
-#todo {
+#todo_panel {
   position:absolute;
   right:0;
   bottom:0;
+  text-shadow:none;
 }
 
-#todo a {
+#todo_panel h2 {
+  text-align:right;
+}
+
+#todo_list {
+  /*display:none;*/
+  color:#fff;
+  font:15px/1 sans-serif;
+  background-color:rgba(16, 16, 16, .9);
+  width:300px;
+  padding:11px 13px;
+  margin-right:3px;
+}
+#todo_list h3 {
+  color:#888;
+  font:15px/1 sans-serif;
+  margin:0 0 7px 0;
+}
+#todo_list ul {
+  list-style-type:none;
+  padding:0;
+  margin:0 0 7px 0;
+}
+#todo_list ul li {
+  padding:1px;
+  margin:0;
+  clear:both;
+}
+#todo_list ul li img {
+  float:right;
+  visibility:hidden;
+  width:16px;
+  height:16px;
+  margin-right:1px;
+  -webkit-filter:invert(70%);
+}
+#todo_list ul li img:hover {
+  -webkit-filter:invert(100%);
+}
+#todo_list ul li:hover img {
+  visibility:visible;
+  cursor:pointer;
+}
+#todo_list ul li input[type="checkbox"] {
+  float:left;
+  margin-top:2px;
+  margin-left:-1px;
+}
+#todo_list ul li label {
+  display:block;
+  margin-left:10px;
+  margin-right:20px;
+}
+#todo_list ul li.done label {
+  color:#888;
+  text-decoration:line-through;
+}
+#todo_list input[type="text"] {
+  width:100%;
+  color:#fff;
+  background-color:rgba(0,0,0,0);
+  font:15px/1 sans-serif;
+  padding:0;
+  outline:0;
+  border:0
+}
+a#todo_toggle {
   display:inline-block;
   color:#fff;
-  text-decoration: none;
-  padding: 20px;
+  text-decoration:none;
+  padding:20px;
 }
-
-
