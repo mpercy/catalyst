@@ -9,13 +9,13 @@
 
     <table id="hello"><tr><td>
     <div id="time"></div>
-    <h1>Hello, Mike.</h1>
+    <h1>Good morning, Mike.</h1>
     </td></tr></table>
 
     <div id="todo_panel">
-      <div id="todo_list">
+      <div id="todo_list" class="panel">
         <h3>0 to do</h3>
-        <ul>
+        <ul class="tasks">
         </ul>
         <input id="new_todo" type="text" placeholder="New todo" />
       </div>
@@ -23,16 +23,16 @@
     </div>
 
     <div id="completed_panel">
-      <div id="completed_cont">
+      <div id="completed_cont" class="panel">
         <h3>Completed Tasks</h3>
         <ul class="tabs">
-          <li id="completed_7"><a href="#">7 days</a></li>
-          <li id="completed_30"><a href="#">30 days</a></li>
-          <li id="completed_90"><a href="#">90 days</a></li>
-          <li id="completed_365"><a href="#">365 days</a></li>
+          <li id="completed_7"><a href="#">Last 7d</a></li>
+          <li id="completed_30"><a href="#">Last 30d</a></li>
+          <li id="completed_90"><a href="#">Last 90d</a></li>
+          <li id="completed_all"><a href="#">All time</a></li>
         </ul>
         <div id="completed_list">
-          <ul>
+          <ul class="tasks">
           </ul>
         </div>
       </div>
