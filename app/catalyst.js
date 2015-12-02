@@ -77,24 +77,38 @@ function handleTodoDeleted(e) {
 var INCLUDE_DONE_ONLY = 1;
 var INCLUDE_ALL = 2;
 
+var months = [
+  "Jan", "Feb", "Mar",
+  "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep",
+  "Oct", "Nov", "Dec"
+];
+
 // Displays tasks from todoList inside the given HTML container element
 // with the specified done criteria, and if doneCriteria == INCLUDE_DONE_ONLY,
 // with time completed >= earliestCompletedTime.
 // Returns number of items in the list that are not yet completed.
 function displayTasks(container, todoList, doneCriteria, earliestCompletedTime) {
+  console.log(container, doneCriteria);
   var content = '';
   var numTodo = 0;
   for (var i = 0; i < todoList.length; i++) {
     var todo = todoList[i];
-    if (!todo[IS_DONE]) {
+    if (todo[IS_DONE] && todo[TIME_FINISHED] < earliestCompletedTime) {
+      console.log("criteria", doneCriteria, "task", todo, "time finished", todo[TIME_FINISHED], "earliest", earliestCompletedTime);
+      continue;
+    } else if (!todo[IS_DONE]) {
       numTodo++;
       if (doneCriteria == INCLUDE_DONE_ONLY) {
         continue;
       }
     }
     var id = "todo_item_" + i;
+    var finDate = new Date(todo[TIME_FINISHED]);
+    var finDateStr = months[finDate.getMonth()] + " " + finDate.getDate();
     content += '<li class="' + (todo[IS_DONE] ? 'done' : '') + '">' +
                '<img src="delete96.svg">' +
+               '<span class="date">' + finDateStr + '</span>' +
                '<input type="checkbox" id="' + id + '"' +
                (todo[IS_DONE] ? ' checked' : '') + '>' +
                '<label for="' + id + '">' + todo[TEXT] + '</label>' +
@@ -108,7 +122,8 @@ function displayTasks(container, todoList, doneCriteria, earliestCompletedTime) 
 
 function renderTodoList(todoList) {
   var container = $("#todo_list");
-  var numTodo = displayTasks(container, todoList, INCLUDE_ALL, 0);
+  var oneDayAgo = new Date().getTime() - (24 * 60 * 60 * 1000);
+  var numTodo = displayTasks(container, todoList, INCLUDE_ALL, oneDayAgo);
   container.children("h3").text(numTodo + ' to do');
 }
 

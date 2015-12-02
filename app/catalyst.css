@@ -101,8 +101,12 @@ ul.tasks li img {
   width:16px;
   height:16px;
   margin-right:1px;
+  margin-left:10px;
   filter:invert(70%);
   -webkit-filter:invert(70%);
+}
+ul.tasks li .date {
+  float:right;
 }
 ul.tasks li img:hover {
   filter:invert(100%);
@@ -119,12 +123,15 @@ ul.tasks li input[type="checkbox"] {
 }
 ul.tasks li label {
   display:block;
-  margin-left:10px;
+  margin-left:15px;
   margin-right:20px;
 }
 ul.tasks li.done label {
   color:#888;
   text-decoration:line-through;
+}
+#todo_list ul.tasks li .date {
+  display:none;
 }
 #todo_list input[type="text"] {
   width:100%;
@@ -147,6 +154,7 @@ ul.tasks li.done label {
 }
 
 #completed_cont ul.tabs {
+  display:none; /* TODO: implement me. */
   list-style-type:none;
   width:100%;
   padding:0;
