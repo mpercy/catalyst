@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>New Tab</title>
+    <meta charset="utf-8" />
     <link rel="stylesheet" type="text/css" href="catalyst.css" />
   </head>
   <body>
@@ -18,7 +19,24 @@
         </ul>
         <input id="new_todo" type="text" placeholder="New todo" />
       </div>
-      <h2><a id="todo_toggle" href="#">Todo</a></h2>
+      <h2><a class="toggle" id="todo_toggle" href="#">Todo</a></h2>
+    </div>
+
+    <div id="completed_panel">
+      <div id="completed_cont">
+        <h3>Completed Tasks</h3>
+        <ul class="tabs">
+          <li id="completed_7"><a href="#">7 days</a></li>
+          <li id="completed_30"><a href="#">30 days</a></li>
+          <li id="completed_90"><a href="#">90 days</a></li>
+          <li id="completed_365"><a href="#">365 days</a></li>
+        </ul>
+        <div id="completed_list">
+          <ul>
+          </ul>
+        </div>
+      </div>
+      <h2><a class="toggle" id="completed_toggle" href="#">Completed</a></h2>
     </div>
 
     <script type="text/javascript" src="jquery-2.1.4.min.js"></script>
