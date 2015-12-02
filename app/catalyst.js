@@ -6,17 +6,35 @@ var TIME_FINISHED = 'f';
 var IS_DONE = 'd';
 var ACTIVE_TODOS = 'active_todos';
 
+var g_current_greeting_str = "";
 var g_current_time_str = "";
+
+function updateGreeting(hour) {
+  var greetingStr = '';
+  if (hour >= 0 && hour < 12) {
+    greetingStr = "morning";
+  } else if (hour >= 12 && hour < 18) {
+    greetingStr = "afternoon";
+  } else {
+    greetingStr = "evening";
+  }
+  if (greetingStr != g_current_greeting_str) {
+    g_current_greeting_str = greetingStr;
+    $("#greeting").text("Good " + g_current_greeting_str);
+  }
+}
 
 function updateTime() {
   var d = new Date();
-  var minutes = ("0" + d.getMinutes()).slice(-2); // No sprintf() in JS.
-  var time = d.getHours() + ":" + minutes;
-  if (time != g_current_time_str) {
-    g_current_time_str = time;
+  var hour = d.getHours();
+  updateGreeting(hour);
+  var minute = ("0" + d.getMinutes()).slice(-2); // No sprintf() in JS.
+  var timeStr = hour + ":" + minute;
+  if (timeStr != g_current_time_str) {
+    g_current_time_str = timeStr;
     $("#time").text(g_current_time_str);
   }
-  setTimeout(updateTime, 1000);
+  setTimeout(updateTime, 5000);
 }
 
 var OP_FINISHED = 1;
