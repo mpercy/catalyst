@@ -5,6 +5,17 @@ var TODO_LIST = [
   { text: 'Item 3', created: 0, finished: 0, isDone: false }
 ];
 
+var currentTimeStr = "";
+
+function updateTime() {
+  var d = new Date();
+  var time = d.getHours() + ":" + d.getMinutes();
+  if (time != currentTimeStr) {
+    currentTimeStr = time;
+    $("#time").text(currentTimeStr);
+  }
+  setTimeout(updateTime, 1000);
+}
 function toggleTodoList(e) {
   e.preventDefault();
   var list = $("#todo_list");
@@ -49,6 +60,7 @@ function handleEnterInTodoBox(e) {
 }
 
 $(document).ready(function() {
+  updateTime();
   renderTodoList();
   $("#todo_toggle").click(toggleTodoList);
   $("#new_todo").keydown(handleEnterInTodoBox);

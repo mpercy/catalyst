@@ -30,7 +30,7 @@ body {
   vertical-align:middle;
   text-align:center;
 }
-.time {
+#time {
   font: 172px/1 sans-serif;
 }
 h1 {
