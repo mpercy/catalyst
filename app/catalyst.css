@@ -143,7 +143,7 @@ ul.tasks li.done label {
   text-shadow:none;
 }
 #completed_cont {
-  /*display:none;*/
+  display:none;
 }
 
 #completed_cont ul.tabs {
@@ -170,5 +170,9 @@ ul.tasks li.done label {
 #completed_cont ul.tabs li a:hover { text-decoration:underline; }
 #completed_list {
   clear:both;
+  padding-top:10px;
+}
+#completed_list ul.tasks li.done label {
+  text-decoration:none;
 }
 

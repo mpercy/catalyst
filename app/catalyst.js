@@ -19,16 +19,6 @@ function updateTime() {
   setTimeout(updateTime, 1000);
 }
 
-function toggleTodoList(e) {
-  e.preventDefault();
-  var list = $("#todo_list");
-  if (list.css("display") == "none") {
-    list.css("display", "block");
-  } else {
-    list.css("display", "none");
-  }
-}
-
 var OP_FINISHED = 1;
 var OP_REOPENED = 2;
 var OP_DELETED = 3;
@@ -50,7 +40,7 @@ function updateTodoListItem(index, op) {
       break;
   }
   localStorage.setItem(ACTIVE_TODOS, JSON.stringify(todoList));
-  renderTodoList(todoList);
+  renderLists(todoList);
 }
 
 function handleTodoToggleFinished(e) {
@@ -66,10 +56,24 @@ function handleTodoDeleted(e) {
   updateTodoListItem(index, OP_DELETED);
 }
 
-function renderTodoList(todoList) {
+var INCLUDE_DONE_ONLY = 1;
+var INCLUDE_ALL = 2;
+
+// Displays tasks from todoList inside the given HTML container element
+// with the specified done criteria, and if doneCriteria == INCLUDE_DONE_ONLY,
+// with time completed >= earliestCompletedTime.
+// Returns number of items in the list that are not yet completed.
+function displayTasks(container, todoList, doneCriteria, earliestCompletedTime) {
   var content = '';
+  var numTodo = 0;
   for (var i = 0; i < todoList.length; i++) {
     var todo = todoList[i];
+    if (!todo[IS_DONE]) {
+      numTodo++;
+      if (doneCriteria == INCLUDE_DONE_ONLY) {
+        continue;
+      }
+    }
     var id = "todo_item_" + i;
     content += '<li class="' + (todo[IS_DONE] ? 'done' : '') + '">' +
                '<img src="delete96.svg">' +
@@ -78,10 +82,28 @@ function renderTodoList(todoList) {
                '<label for="' + id + '">' + todo[TEXT] + '</label>' +
                '</li>' + "\n";
   }
-  $("#todo_list h3").text(todoList.length + ' to do');
-  $("#todo_list ul").html(content);
-  $("#todo_list ul li input[type='checkbox']").click(handleTodoToggleFinished);
-  $("#todo_list ul li img").click(handleTodoDeleted);
+  container.find("ul.tasks").html(content);
+  container.find("ul.tasks li input[type='checkbox']").click(handleTodoToggleFinished);
+  container.find("ul.tasks li img").click(handleTodoDeleted);
+  return numTodo;
+}
+
+function renderTodoList(todoList) {
+  var container = $("#todo_list");
+  var numTodo = displayTasks(container, todoList, INCLUDE_ALL, 0);
+  container.children("h3").text(numTodo + ' to do');
+}
+
+function renderCompletedList(todoList) {
+  var container = $("#completed_list");
+  var numTodo = displayTasks(container, todoList, INCLUDE_DONE_ONLY, 0);
+  var numCompleted = todoList.length - numTodo;
+  container.children("h3").text(numCompleted + ' completed');
+}
+
+function renderLists(todoList) {
+  renderTodoList(todoList);
+  renderCompletedList(todoList);
 }
 
 function initTodoList() {
@@ -93,7 +115,7 @@ function initTodoList() {
     // Init empty list.
     localStorage.setItem(ACTIVE_TODOS, JSON.stringify(activeTodos));
   }
-  renderTodoList(activeTodos);
+  renderLists(activeTodos);
 }
 
 function appendTodoToList(text) {
@@ -121,9 +143,23 @@ function handleEnterInTodoBox(e) {
   }
 }
 
+function togglePanel(e, panel) {
+  e.preventDefault();
+  if (panel.css("display") == "none") {
+    panel.css("display", "block");
+  } else {
+    panel.css("display", "none");
+  }
+}
+
 $(document).ready(function() {
   updateTime();
   initTodoList();
-  $("#todo_toggle").click(toggleTodoList);
+  $("#todo_toggle").click(function(e) {
+    togglePanel(e, $("#todo_list"));
+  });
+  $("#completed_toggle").click(function(e) {
+    togglePanel(e, $("#completed_cont"));
+  });
   $("#new_todo").keydown(handleEnterInTodoBox);
 });
