@@ -1,11 +1,16 @@
 
 // Constants.
+
+// We use single characters as keys in the todo list hash to minimize JSON
+// serialization overhead in localStorage.
 var TEXT = 't';
 var TIME_CREATED = 'c';
 var TIME_FINISHED = 'f';
 var IS_DONE = 'd';
+
 var ACTIVE_TODOS = 'active_todos';
 
+// Globals.
 var g_current_greeting_str = "";
 var g_current_time_str = "";
 
@@ -40,8 +45,9 @@ function updateTime() {
 var OP_FINISHED = 1;
 var OP_REOPENED = 2;
 var OP_DELETED = 3;
+var OP_EDITED = 4;
 
-function updateTodoListItem(index, op) {
+function updateTodoListItem(index, op, newText) {
   var todoList = JSON.parse(localStorage.getItem(ACTIVE_TODOS));
   switch (op) {
     case OP_FINISHED:
@@ -54,23 +60,30 @@ function updateTodoListItem(index, op) {
     case OP_DELETED:
       todoList.splice(index, 1);
       break;
+    case OP_EDITED:
+      todoList[index][TEXT] = newText;
+      break;
     default:
+      console.log("Script error", index, op);
       break;
   }
   localStorage.setItem(ACTIVE_TODOS, JSON.stringify(todoList));
   renderLists(todoList);
 }
 
+function indexFromId(id) {
+  return parseInt(id.substr(10));
+}
+
 function handleTodoToggleFinished(e) {
-  var id = this.id;
-  var index = parseInt(id.substr(10));
+  var index = indexFromId(this.id);
   var op = this.checked ? OP_FINISHED : OP_REOPENED;
   updateTodoListItem(index, op);
 }
 
 function handleTodoDeleted(e) {
-  var id = $(this).siblings("input").attr("id");
-  var index = parseInt(id.substr(10));
+  var id = $(this).siblings("input[type='checkbox']").attr("id");
+  var index = indexFromId(id);
   updateTodoListItem(index, OP_DELETED);
 }
 
@@ -89,13 +102,11 @@ var months = [
 // with time completed >= earliestCompletedTime.
 // Returns number of items in the list that are not yet completed.
 function displayTasks(container, todoList, doneCriteria, earliestCompletedTime) {
-  console.log(container, doneCriteria);
   var content = '';
   var numTodo = 0;
   for (var i = 0; i < todoList.length; i++) {
     var todo = todoList[i];
     if (todo[IS_DONE] && todo[TIME_FINISHED] < earliestCompletedTime) {
-      console.log("criteria", doneCriteria, "task", todo, "time finished", todo[TIME_FINISHED], "earliest", earliestCompletedTime);
       continue;
     } else if (!todo[IS_DONE]) {
       numTodo++;
@@ -111,13 +122,73 @@ function displayTasks(container, todoList, doneCriteria, earliestCompletedTime) 
                '<span class="date">' + finDateStr + '</span>' +
                '<input type="checkbox" id="' + id + '"' +
                (todo[IS_DONE] ? ' checked' : '') + '>' +
-               '<label for="' + id + '">' + todo[TEXT] + '</label>' +
+               '<label>' + todo[TEXT] + '</label>' +
+               '<input type="text" />' +
                '</li>' + "\n";
   }
   container.find("ul.tasks").html(content);
   container.find("ul.tasks li input[type='checkbox']").click(handleTodoToggleFinished);
+  container.find("ul.tasks li label").dblclick(startTodoEdit);
+  container.find("ul.tasks li input[type='text']").keydown(finishTodoEdit);
   container.find("ul.tasks li img").click(handleTodoDeleted);
   return numTodo;
+}
+
+function startTodoEdit(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  var label = $(this);
+  var inputbox = label.siblings("input[type='text']");
+  var checkbox = label.siblings("input[type='checkbox']");
+  $(document).bind("click.editing", function(e) {
+    saveTodoEdit(inputbox);
+  });
+  inputbox.bind("click.editing", function(e) {
+    e.stopPropagation();
+  });
+  inputbox.width(label.width() - 10);
+  //inputbox.height(label.height());
+  inputbox.val(label.text());
+  checkbox.css("display", "none");
+  label.css("display", "none");
+  inputbox.css("display", "block");
+  inputbox.focus();
+  inputbox.get(0).setSelectionRange(0,0);
+}
+
+function unbindEvents(inputbox) {
+  $(document).unbind("click.editing");
+  inputbox.unbind("click.editing");
+}
+
+function cancelTodoEdit(inputbox) {
+  unbindEvents(inputbox);
+  var label = inputbox.siblings("label");
+  var checkbox = inputbox.siblings("input[type='checkbox']");
+  checkbox.css("display", "block");
+  label.css("display", "block");
+  inputbox.css("display", "none");
+  inputbox.val("");
+}
+
+function saveTodoEdit(inputbox) {
+  unbindEvents(inputbox);
+  var checkbox = inputbox.siblings("input[type='checkbox']");
+  var index = indexFromId(checkbox.attr("id"));
+  var val = inputbox.val();
+  if (val === "") {
+    updateTodoListItem(index, OP_DELETED); // Delete if empty.
+  } else {
+    updateTodoListItem(index, OP_EDITED, val); // Edit otherwise.
+  }
+}
+
+function finishTodoEdit(e) {
+  if (e.which == 27) { // Esc
+    cancelTodoEdit($(this));
+  } else if (e.which == 13) { // Enter
+    saveTodoEdit($(this));
+  }
 }
 
 function renderTodoList(todoList) {
@@ -164,7 +235,7 @@ function appendTodoToList(text) {
   renderTodoList(todoList);
 }
 
-function handleEnterInTodoBox(e) {
+function handleEnterInNewTodoBox(e) {
   if (e.which != 13) return; // Only continue if Enter key.
   e.preventDefault();
   var input = $("#new_todo");
@@ -194,5 +265,5 @@ $(document).ready(function() {
   $("#completed_toggle").click(function(e) {
     togglePanel(e, $("#completed_cont"));
   });
-  $("#new_todo").keydown(handleEnterInTodoBox);
+  $("#new_todo").keydown(handleEnterInNewTodoBox);
 });

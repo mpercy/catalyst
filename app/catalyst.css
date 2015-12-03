@@ -46,6 +46,15 @@ h3 {
   margin:0 0 7px 0;
 }
 
+input[type="text"] {
+  color:#fff;
+  background-color:rgba(0,0,0,0);
+  font:15px/1 sans-serif;
+  padding:0;
+  outline:0;
+  border:0
+}
+
 #hello {
   height:100%;
   width:100%;
@@ -121,10 +130,17 @@ ul.tasks li input[type="checkbox"] {
   margin-top:2px;
   margin-left:-1px;
 }
-ul.tasks li label {
+ul.tasks li label, ul.tasks li input[type="text"] {
   display:block;
   margin-left:18px;
   margin-right:20px;
+}
+ul.tasks li input[type="text"] {
+  display:none;
+  color:#ddd;
+  position:relative;
+  top:-1px;
+  margin-bottom:-2px;
 }
 ul.tasks li.done label {
   color:#888;
@@ -133,14 +149,8 @@ ul.tasks li.done label {
 #todo_list ul.tasks li .date {
   display:none;
 }
-#todo_list input[type="text"] {
+#todo_list input[type="text"]#new_todo {
   width:100%;
-  color:#fff;
-  background-color:rgba(0,0,0,0);
-  font:15px/1 sans-serif;
-  padding:0;
-  outline:0;
-  border:0
 }
 
 #completed_panel {
