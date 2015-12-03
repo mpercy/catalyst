@@ -141,7 +141,7 @@ function startTodoEdit(e) {
   var inputbox = label.siblings("input[type='text']");
   var checkbox = label.siblings("input[type='checkbox']");
   $(document).bind("click.editing", function(e) {
-    saveTodoEdit(inputbox);
+    cancelTodoEdit(inputbox);
   });
   inputbox.bind("click.editing", function(e) {
     e.stopPropagation();
